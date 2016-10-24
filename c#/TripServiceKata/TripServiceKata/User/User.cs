@@ -32,11 +32,9 @@ namespace TripServiceKata.User
             bool isFriend = false;
             foreach (User friend in GetFriends())
             {
-                if (friend.Equals(loggedUser))
-                {
-                    isFriend = true;
-                    break;
-                }
+                if (!friend.Equals(loggedUser)) continue;
+                isFriend = true;
+                break;
             }
             return isFriend;
         }
