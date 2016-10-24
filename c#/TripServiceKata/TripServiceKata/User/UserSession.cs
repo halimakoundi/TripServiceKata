@@ -6,7 +6,7 @@ namespace TripServiceKata.User
     {
         private static readonly UserSession userSession = new UserSession();
 
-        private UserSession() { }
+        protected UserSession() { }
 
         public static UserSession GetInstance()
         {
