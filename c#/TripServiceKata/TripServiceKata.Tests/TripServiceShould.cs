@@ -24,20 +24,29 @@ namespace TripServiceKata.Tests
             var user = new User.User();
             var tripService = new TripService(_userSession);
 
-            Assert.Throws<DependendClassCallDuringUnitTestException>(
+            Assert.Throws<UserNotLoggedInException>(
                 () =>
                 {
                     tripService.GetTripsByUser(user);
                 });
         }
 
+        [Test]
+        public void return_no_trip_when_user_has_no_friends()
+        {
+            var user = new User.User();
+            _userSession.IsUserLoggedIn(user).Returns<bool>(x => true);
+            _userSession.GetLoggedUser().Returns<User.User>(x => user);
+            var tripService = new TripService(_userSession);
 
+            var trips = tripService.GetTripsByUser(user);
+
+            Assert.That(trips, Is.Empty);
+        }
     }
 
     public class UserSessionTest : UserSession
     {
-        private static UserSession _instance;
-
         public UserSessionTest() { }
 
     }
