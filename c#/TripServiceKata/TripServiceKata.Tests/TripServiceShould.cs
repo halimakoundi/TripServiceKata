@@ -72,6 +72,5 @@ namespace TripServiceKata.Tests
     public class UserSessionTest : UserSession
     {
         public UserSessionTest() { }
-
     }
 }
