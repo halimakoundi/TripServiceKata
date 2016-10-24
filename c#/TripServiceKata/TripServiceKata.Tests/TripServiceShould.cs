@@ -30,7 +30,7 @@ namespace TripServiceKata.Tests
             Assert.Throws<UserNotLoggedInException>(
                 () =>
                 {
-                    _tripService.GetTripsByUser(new User.User());
+                    _tripService.GetTripsBy(new User.User());
                 });
         }
 
@@ -41,7 +41,7 @@ namespace TripServiceKata.Tests
             _userSession.GetLoggedUser().Returns(x => _loggedInUser);
             var notFriendedUser = new User.User();
 
-            var trips = _tripService.GetTripsByUser(notFriendedUser);
+            var trips = _tripService.GetTripsBy(notFriendedUser);
 
             Assert.That(trips, Is.Empty);
         }
@@ -51,7 +51,7 @@ namespace TripServiceKata.Tests
         {
             var expectedTrips = GivenUserHasFriendsWithTrips();
 
-            var trips = _tripService.GetTripsByUser(_friendedUser);
+            var trips = _tripService.GetTripsBy(_friendedUser);
 
             Assert.That(trips, Is.EqualTo(expectedTrips));
         }
@@ -64,7 +64,7 @@ namespace TripServiceKata.Tests
             _userSession.IsUserLoggedIn(_loggedInUser).Returns<bool>(x => true);
             _userSession.GetLoggedUser().Returns(x => _loggedInUser);
             var expectedTrips = new List<Trip.Trip> {toParis};
-            _tripDao.FindTripsByUser(_friendedUser).Returns(x => expectedTrips);
+            _tripDao.FindTripsBy(_friendedUser).Returns(x => expectedTrips);
             return expectedTrips;
         }
     }

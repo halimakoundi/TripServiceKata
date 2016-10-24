@@ -15,7 +15,7 @@ namespace TripServiceKata.Trip
             _tripDAO = tripDao;
         }
 
-        public List<Trip> GetTripsByUser(User.User user)
+        public List<Trip> GetTripsBy(User.User user)
         {
             var loggedUser = _userSession.GetLoggedUser();
 
@@ -29,7 +29,7 @@ namespace TripServiceKata.Trip
             var tripList = new List<Trip>();
             if (user.IsFriendWith(loggedUser))
             {
-                tripList = _tripDAO.FindTripsByUser(user);
+                tripList = _tripDAO.FindTripsBy(user);
             }
             return tripList;
         }
