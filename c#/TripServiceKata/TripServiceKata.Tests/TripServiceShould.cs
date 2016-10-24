@@ -41,12 +41,12 @@ namespace TripServiceKata.Tests
             var user = new User.User();
             _userSession.IsUserLoggedIn(user).Returns<bool>(x => true);
             _userSession.GetLoggedUser().Returns(x => user);
+            var notFriendedUser = new User.User();
 
-            var trips = _tripService.GetTripsByUser(user);
+            var trips = _tripService.GetTripsByUser(notFriendedUser);
 
             Assert.That(trips, Is.Empty);
         }
-
 
         [Test]
         public void throw_an_exception_when_accessing_friend_trip()
