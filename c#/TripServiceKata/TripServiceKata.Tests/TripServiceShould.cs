@@ -49,7 +49,7 @@ namespace TripServiceKata.Tests
         }
 
         [Test]
-        public void throw_an_exception_when_accessing_friend_trip()
+        public void throw_an_exception_when_accessing_friend_trip_calling_tripDao_from_tests()
         {
             var user = new User.User();
             var friendUserWithTrips = new User.User();
