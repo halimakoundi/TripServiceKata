@@ -11,13 +11,15 @@ namespace TripServiceKata.Tests
     {
         private UserSessionTest _userSession;
         private TripService _tripService;
+        private TripDAO _tripDao;
 
 
         [SetUp]
         public void SetUp()
         {
             _userSession = Substitute.For<UserSessionTest>();
-            _tripService = new TripService(_userSession);
+            _tripDao = Substitute.For<TripDAO>();
+            _tripService = new TripService(_userSession, _tripDao);
 
         }
 

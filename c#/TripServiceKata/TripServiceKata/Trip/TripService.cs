@@ -7,10 +7,12 @@ namespace TripServiceKata.Trip
     public class TripService
     {
         private readonly UserSession _userSession;
+        private readonly TripDAO _tripDAO;
 
-        public TripService(UserSession userSession)
+        public TripService(UserSession userSession, TripDAO tripDao)
         {
             _userSession = userSession;
+            _tripDAO = tripDao;
         }
 
         public List<Trip> GetTripsByUser(User.User user)
@@ -30,7 +32,7 @@ namespace TripServiceKata.Trip
                 }
                 if (isFriend)
                 {
-                    tripList = TripDAO.FindTripsByUser(user);
+                    tripList = _tripDAO.FindTripsByUser(user);
                 }
                 return tripList;
             }
