@@ -20,6 +20,13 @@ namespace TripServiceKata.Trip
             List<Trip> tripList = new List<Trip>();
             User.User loggedUser = _userSession.GetLoggedUser();
             SkipIfUserNotLoggedIn(loggedUser);
+            tripList = TripList(user, loggedUser);
+            return tripList;
+        }
+
+        private List<Trip> TripList(User.User user, User.User loggedUser)
+        {
+            List<Trip> tripList = new List<Trip>();
             bool isFriend = false;
             foreach (User.User friend in user.GetFriends())
             {
