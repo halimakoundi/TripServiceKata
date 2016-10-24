@@ -17,14 +17,15 @@ namespace TripServiceKata.Trip
 
         public List<Trip> GetTripsByUser(User.User user)
         {
-            List<Trip> tripList = new List<Trip>();
             User.User loggedUser = _userSession.GetLoggedUser();
+
             SkipIfUserNotLoggedIn(loggedUser);
-            tripList = TripList(user, loggedUser);
+
+            var tripList = TripsFor(user, loggedUser, _tripDAO);
             return tripList;
         }
 
-        private List<Trip> TripList(User.User user, User.User loggedUser)
+        private List<Trip> TripsFor(User.User user, User.User loggedUser, TripDAO tripDao)
         {
             List<Trip> tripList = new List<Trip>();
             bool isFriend = false;
@@ -38,7 +39,7 @@ namespace TripServiceKata.Trip
             }
             if (isFriend)
             {
-                tripList = _tripDAO.FindTripsByUser(user);
+                tripList = tripDao.FindTripsByUser(user);
             }
             return tripList;
         }
