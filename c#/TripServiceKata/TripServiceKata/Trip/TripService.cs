@@ -28,15 +28,7 @@ namespace TripServiceKata.Trip
         private List<Trip> TripsFor(User.User user, User.User loggedUser, TripDAO tripDao)
         {
             List<Trip> tripList = new List<Trip>();
-            bool isFriend = false;
-            foreach (User.User friend in user.GetFriends())
-            {
-                if (friend.Equals(loggedUser))
-                {
-                    isFriend = true;
-                    break;
-                }
-            }
+            var isFriend = user.IsFriendWith(loggedUser);
             if (isFriend)
             {
                 tripList = tripDao.FindTripsByUser(user);
