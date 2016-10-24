@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System.Collections.Generic;
+using NSubstitute;
 using NUnit.Framework;
 using TripServiceKata.Exception;
 using TripServiceKata.Trip;
@@ -12,6 +13,14 @@ namespace TripServiceKata.Tests
         private UserSessionTest _userSession;
         private TripService _tripService;
         private TripDAO _tripDao;
+        private User.User _loggedInUser;
+        private User.User _friendedUser;
+
+        public TripServiceShould()
+        {
+            _loggedInUser = new User.User();
+            _friendedUser = new User.User();
+        }
 
 
         [SetUp]
@@ -49,20 +58,19 @@ namespace TripServiceKata.Tests
         }
 
         [Test]
-        public void throw_an_exception_when_accessing_friend_trip_calling_tripDao_from_tests()
+        public void return_trips_of_a_friend_user()
         {
-            var user = new User.User();
-            var friendUserWithTrips = new User.User();
-            friendUserWithTrips.AddTrip(new Trip.Trip());
-            friendUserWithTrips.AddFriend(user);
-            _userSession.IsUserLoggedIn(user).Returns<bool>(x => true);
-            _userSession.GetLoggedUser().Returns(x => user);
+            var trip = new Trip.Trip();
+            _friendedUser.AddTrip(trip);
+            _friendedUser.AddFriend(_loggedInUser);
+            _userSession.IsUserLoggedIn(_loggedInUser).Returns<bool>(x => true);
+            _userSession.GetLoggedUser().Returns(x => _loggedInUser);
+            var expectedTrips = new List<Trip.Trip> {trip};
+            _tripDao.FindTripsByUser(_friendedUser).Returns(x => expectedTrips);
 
-            Assert.Throws<DependendClassCallDuringUnitTestException>(
-                () =>
-                {
-                    _tripService.GetTripsByUser(friendUserWithTrips);
-                });
+            var trips = _tripService.GetTripsByUser(_friendedUser);
+
+            Assert.That(trips, Is.EqualTo(expectedTrips));
         }
     }
 
