@@ -10,24 +10,26 @@ namespace TripServiceKata.Tests
     public class TripServiceShould
     {
         private UserSessionTest _userSession;
+        private TripService _tripService;
 
 
         [SetUp]
         public void SetUp()
         {
             _userSession = Substitute.For<UserSessionTest>();
+            _tripService = new TripService(_userSession);
+
         }
 
         [Test]
         public void throw_an_error_when_user_not_logged_in()
         {
             var user = new User.User();
-            var tripService = new TripService(_userSession);
 
             Assert.Throws<UserNotLoggedInException>(
                 () =>
                 {
-                    tripService.GetTripsByUser(user);
+                    _tripService.GetTripsByUser(user);
                 });
         }
 
@@ -36,12 +38,29 @@ namespace TripServiceKata.Tests
         {
             var user = new User.User();
             _userSession.IsUserLoggedIn(user).Returns<bool>(x => true);
-            _userSession.GetLoggedUser().Returns<User.User>(x => user);
-            var tripService = new TripService(_userSession);
+            _userSession.GetLoggedUser().Returns(x => user);
 
-            var trips = tripService.GetTripsByUser(user);
+            var trips = _tripService.GetTripsByUser(user);
 
             Assert.That(trips, Is.Empty);
+        }
+
+
+        [Test]
+        public void throw_an_exception_when_accessing_friend_trip()
+        {
+            var user = new User.User();
+            var friendUserWithTrips = new User.User();
+            friendUserWithTrips.AddTrip(new Trip.Trip());
+            friendUserWithTrips.AddFriend(user);
+            _userSession.IsUserLoggedIn(user).Returns<bool>(x => true);
+            _userSession.GetLoggedUser().Returns(x => user);
+
+            Assert.Throws<DependendClassCallDuringUnitTestException>(
+                () =>
+                {
+                    _tripService.GetTripsByUser(friendUserWithTrips);
+                });
         }
     }
 
